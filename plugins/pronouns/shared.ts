@@ -109,17 +109,13 @@ export function onUpdate(fn: () => void): () => void {
 }
 
 let reporter: { reportError(e: unknown): void } | undefined
-const reported = new Set<string>()
 
 export function setReporter(plugin: typeof reporter) {
 	reporter = plugin
-	reported.clear()
 }
 
 export function reportError(context: string, error: unknown) {
 	const message = `Pronouns: ${context}: ${getErrorStack(error)}`
-	if (reported.has(message)) return
-	reported.add(message)
 	reporter?.reportError(message)
 }
 

@@ -158,7 +158,6 @@ export default function SettingsComponent() {
 					<TableRowGroup>
 						<TableSwitchRow
 							label="Show in chat"
-							subLabel="Show a pronoun badge beside message authors."
 							icon={<TableRowAssetIcon name="UserCircleIcon" />}
 							value={s.showInChat}
 							onValueChange={showInChat => update({ showInChat })}
@@ -167,14 +166,12 @@ export default function SettingsComponent() {
 					<TableRowGroup title="Sources">
 						<TableSwitchRow
 							label="Also check PronounDB"
-							subLabel="Use pronoundb.org as an additional source of pronouns."
 							value={s.pronounDbEnabled}
 							onValueChange={pronounDbEnabled => update({ pronounDbEnabled })}
 						/>
 						{s.pronounDbEnabled && (
 							<TableSwitchRow
 								label="Discord pronouns first"
-								subLabel="Off asks PronounDB before the person's own Discord profile."
 								value={s.discordFirst}
 								onValueChange={discordFirst => update({ discordFirst })}
 							/>
@@ -183,14 +180,12 @@ export default function SettingsComponent() {
 					<TableRowGroup title="Clean up">
 						<TableSwitchRow
 							label="Only real pronouns"
-							subLabel="Shows just the pronouns from a profile (“he/him 🌈 | 19” → “he/him”) and hides fields with none. Includes neopronouns."
 							value={s.validOnly}
 							onValueChange={validOnly => update({ validOnly })}
 						/>
 						{s.validOnly && (
 							<TableSwitchRow
 								label="Count Any and All"
-								subLabel="“any”, “all”, “any pronouns” show as pronouns."
 								value={s.allowAnyAll}
 								onValueChange={allowAnyAll => update({ allowAnyAll })}
 							/>
