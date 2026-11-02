@@ -26,28 +26,13 @@ function Input(props: InputProps) {
 	return <TextInput {...props} />
 }
 
-function Field({
-	label,
-	description,
-	children,
-}: {
-	label: string
-	description: string
-	children: ReactNode
-}) {
-	const { TableRowGroup, TableRow, Text } = Design
+function Field({ label, children }: { label: string; children: ReactNode }) {
+	const { TableRowGroup, TableRow } = Design
 	return (
 		<TableRowGroup>
 			<TableRow
 				label={label}
-				subLabel={
-					<View style={{ gap: 8, marginTop: 8 }}>
-						{children}
-						<Text variant="text-sm/normal" color="text-muted">
-							{description}
-						</Text>
-					</View>
-				}
+				subLabel={<View style={{ marginTop: 8 }}>{children}</View>}
 			/>
 		</TableRowGroup>
 	)
@@ -191,10 +176,7 @@ export default function SettingsComponent() {
 							/>
 						)}
 					</TableRowGroup>
-					<Field
-						label="Badge colour"
-						description="Tap a colour again to go back to Discord's own."
-					>
+					<Field label="Badge color">
 						<Swatches />
 					</Field>
 					<TableRowGroup title="Pronouns you set">

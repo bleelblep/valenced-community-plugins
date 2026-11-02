@@ -2,7 +2,7 @@
 	"format": 1,
 	"id": "bleelblep.pronouns",
 	"name": "Pronouns",
-	"description": "People's pronouns as a small tag next to their name in chat, from Discord profiles and PronounDB.",
+	"description": "Show people's pronouns next to their names in chat, from Discord profiles and PronounDB.",
 	"author": "bleelblep <119043674385547264>",
 	"icon": "UserCircleIcon",
 	"version": "1.0.0",

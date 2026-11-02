@@ -183,9 +183,7 @@ function SheetRow({ message }: { message: Message }) {
 					<ActionSheetRow.Icon source={getAssetIdByName('UserCircleIcon')} />
 				}
 				onPress={() => {
-					try {
-						ActionSheetActionCreators.hideActionSheet()
-					} catch {}
+					ActionSheetActionCreators.hideActionSheet()
 					const { globalName, username } = message.author ?? {}
 					promptOverride(authorId, globalName ?? username ?? 'this person')
 				}}
