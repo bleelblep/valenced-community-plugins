@@ -7,8 +7,7 @@ import type { PluginSettingsComponent } from '@valenced/plugins/types'
 import type { ComponentProps, ReactNode } from 'react'
 import type { Settings, TagOverride } from './shared'
 
-const { Stack, TableRow, TableRowGroup, TableSwitchRow, Text, TextInput } =
-	Design
+const { Stack, TableRow, TableRowGroup, TableSwitchRow, TextInput } = Design
 
 type SettingsComponentProps = ComponentProps<
 	PluginSettingsComponent<{ jsonStorage: Settings }>
@@ -28,7 +27,7 @@ export default function SettingsComponent({
 				<Stack spacing={24}>
 					<TableRowGroup title="Everywhere">
 						<TableSwitchRow
-							label="Use role colour"
+							label="Use role color"
 							value={!!useRoleColor}
 							onValueChange={useRoleColor => storage.set({ useRoleColor })}
 						/>
@@ -76,7 +75,7 @@ function TagRows({
 				value={enabled}
 				onValueChange={enabled => setOverride(id, { enabled })}
 			/>
-			<FieldRow label="Text" description="Empty uses the original">
+			<FieldRow label="Text">
 				<TextInput
 					placeholder={text}
 					value={custom.text ?? ''}
@@ -85,7 +84,7 @@ function TagRows({
 					onChange={text => setOverride(id, { text })}
 				/>
 			</FieldRow>
-			<FieldRow label="Colour" description={`Hex like ${defaultColor}`}>
+			<FieldRow label="Color">
 				<TextInput
 					placeholder={defaultColor}
 					value={color}
@@ -103,26 +102,11 @@ function TagRows({
 	)
 }
 
-function FieldRow({
-	label,
-	description,
-	children,
-}: {
-	label: string
-	description: string
-	children: ReactNode
-}) {
+function FieldRow({ label, children }: { label: string; children: ReactNode }) {
 	return (
 		<TableRow
 			label={label}
-			subLabel={
-				<View style={{ gap: 8, marginTop: 8 }}>
-					{children}
-					<Text variant="text-sm/normal" color="text-muted">
-						{description}
-					</Text>
-				</View>
-			}
+			subLabel={<View style={{ marginTop: 8 }}>{children}</View>}
 		/>
 	)
 }

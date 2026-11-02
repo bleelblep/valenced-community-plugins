@@ -2,7 +2,7 @@
 	"format": 1,
 	"id": "bleelblep.staff-tags",
 	"name": "Staff Tags",
-	"description": "Shows extra tags for staff members — OWNER, ADMIN, STAFF, MOD, VC Mod, Chat Mod, WEBHOOK.",
+	"description": "Show tags like OWNER, ADMIN and MOD next to staff members' names.",
 	"author": "bleelblep <119043674385547264>",
 	"contributors": [
 		"Fiery (https://github.com/shipwr3ckd/revengeplugin \"Original plugin\")",

@@ -74,76 +74,58 @@ export default plugin<{ jsonStorage: Settings }>({
 			setPermissionUtils(undefined)
 		})
 
-		// These can run as a bare engine job, where an uncaught throw closes the app
-		const guarded =
-			<T,>(name: string, setup: (module: T) => void) =>
-			(module: T) => {
-				try {
-					setup(module)
-				} catch (error) {
-					report(`${name} setup failed`, error)
-				}
-			}
-
 		const patchedRows = new WeakSet<object>()
-		const patchRow = guarded(
-			'Member list',
-			(row: { type?: unknown } | undefined) => {
-				if (typeof row?.type !== 'function' || patchedRows.has(row)) return
-				patchedRows.add(row)
-				cleanup(
-					instead(
-						row as { type: (props: UserProps) => ReactNode },
-						'type',
-						function (args, original) {
-							const rendered = Reflect.apply(original, this, args)
-							try {
-								return addRowTag(rendered, args[0])
-							} catch (error) {
-								report('Member list tag failed', error)
-								return rendered
-							}
-						},
-					),
-				)
-			},
-		)
+		const patchRow = (row: { type?: unknown } | undefined) => {
+			if (typeof row?.type !== 'function' || patchedRows.has(row)) return
+			patchedRows.add(row)
+			cleanup(
+				instead(
+					row as { type: (props: UserProps) => ReactNode },
+					'type',
+					function (args, original) {
+						const rendered = Reflect.apply(original, this, args)
+						try {
+							return addRowTag(rendered, args[0])
+						} catch (error) {
+							report('Member list tag failed', error)
+							return rendered
+						}
+					},
+				),
+			)
+		}
 
 		cleanup(
-			getModules(
-				withProps<TagModule>('getBotLabel'),
-				guarded('Tag', module => {
-					if (typeof module?.default !== 'function') return
-					setTagModule(module)
-					cleanup(
-						instead(module, 'default', function (args, original) {
-							const rendered = Reflect.apply(original, this, args)
-							try {
-								return paintTag(rendered, args[0])
-							} catch (error) {
-								report('Tag paint failed', error)
-								return rendered
-							}
-						}),
-					)
-				}),
-			),
+			getModules(withProps<TagModule>('getBotLabel'), module => {
+				if (typeof module?.default !== 'function') return
+				setTagModule(module)
+				cleanup(
+					instead(module, 'default', function (args, original) {
+						const rendered = Reflect.apply(original, this, args)
+						try {
+							return paintTag(rendered, args[0])
+						} catch (error) {
+							report('Tag paint failed', error)
+							return rendered
+						}
+					}),
+				)
+			}),
 
 			// PermissionStore also has computePermissions, but answers for the current user only
 			getModules(
 				withProps<PermissionUtils>('computePermissions', 'canEveryoneRole'),
-				guarded('Permissions', setPermissionUtils),
+				setPermissionUtils,
 			),
 
 			getModules(
 				withName<(input: { message?: Message }) => TagProperties | undefined>(
 					'getTagProperties',
 				),
-				guarded('Chat', exports => {
+				exports => {
 					const module = exports as unknown as {
 						default(input: { message?: Message }): TagProperties | undefined
 					}
-					if (typeof module?.default !== 'function') return
 					cleanup(
 						instead(module, 'default', function (args, original) {
 							const ret = Reflect.apply(original, this, args)
@@ -155,7 +137,7 @@ export default plugin<{ jsonStorage: Settings }>({
 							}
 						}),
 					)
-				}),
+				},
 				{ returnNamespace: true },
 			),
 
@@ -163,46 +145,43 @@ export default plugin<{ jsonStorage: Settings }>({
 			getModules(withMemoName('UserRow'), patchRow, { max: 10 }),
 
 			// The profile's default export renders DisplayName from module scope, so the element is swapped
-			getModules(
-				withProps<ProfileModule>('DisplayName'),
-				guarded('Profile', module => {
-					const { DisplayName } = module
-					if (
-						typeof module.default !== 'function' ||
-						typeof DisplayName !== 'function'
-					)
-						return
+			getModules(withProps<ProfileModule>('DisplayName'), module => {
+				const { DisplayName } = module
+				if (
+					typeof module.default !== 'function' ||
+					typeof DisplayName !== 'function'
+				)
+					return
 
-					const Wrapped: DisplayName = props => {
-						const rendered = DisplayName(props)
+				const Wrapped: DisplayName = props => {
+					const rendered = DisplayName(props)
+					try {
+						return addProfileTag(rendered, props)
+					} catch (error) {
+						report('Profile tag failed', error)
+						return rendered
+					}
+				}
+
+				cleanup(
+					after(module, 'default', rendered => {
 						try {
-							return addProfileTag(rendered, props)
+							return replaceInTree(
+								rendered,
+								node => node.type === DisplayName,
+								node =>
+									createElement(Wrapped, {
+										...(node.props as UserProps),
+										key: node.key,
+									}),
+							)
 						} catch (error) {
-							report('Profile tag failed', error)
+							report('Profile failed', error)
 							return rendered
 						}
-					}
-
-					cleanup(
-						after(module, 'default', rendered => {
-							try {
-								return replaceInTree(
-									rendered,
-									node => node.type === DisplayName,
-									node =>
-										createElement(Wrapped, {
-											...(node.props as UserProps),
-											key: node.key,
-										}),
-								)
-							} catch (error) {
-								report('Profile failed', error)
-								return rendered
-							}
-						}),
-					)
-				}),
-			),
+					}),
+				)
+			}),
 		)
 	},
 	// Unpatching can't undo what Discord already rendered
