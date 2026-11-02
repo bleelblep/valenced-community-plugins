@@ -10,20 +10,20 @@ export interface Settings {
 
 // Ids match Format.kt
 export const Formats = [
-	{ id: 'bold', label: 'Bold', example: '**text**' },
-	{ id: 'italic', label: 'Italic', example: '*text*' },
-	{ id: 'underline', label: 'Underline', example: '__text__' },
-	{ id: 'strike', label: 'Strikethrough', example: '~~text~~' },
-	{ id: 'spoiler', label: 'Spoiler', example: '||text||' },
-	{ id: 'code', label: 'Code', example: '`text`' },
-	{ id: 'codeBlock', label: 'Code block', example: '```text```' },
-	{ id: 'link', label: 'Link', example: '[text](address)' },
-	{ id: 'h1', label: 'Big heading', example: '# text' },
-	{ id: 'h2', label: 'Medium heading', example: '## text' },
-	{ id: 'h3', label: 'Small heading', example: '### text' },
-	{ id: 'subtext', label: 'Subtext', example: '-# text' },
-	{ id: 'quote', label: 'Quote', example: '> text' },
-	{ id: 'ansi', label: 'ANSI colour', example: 'Colours in an ```ansi block' },
+	{ id: 'bold', label: 'Bold' },
+	{ id: 'italic', label: 'Italic' },
+	{ id: 'underline', label: 'Underline' },
+	{ id: 'strike', label: 'Strikethrough' },
+	{ id: 'spoiler', label: 'Spoiler' },
+	{ id: 'code', label: 'Code' },
+	{ id: 'codeBlock', label: 'Code block' },
+	{ id: 'link', label: 'Link' },
+	{ id: 'h1', label: 'Big heading' },
+	{ id: 'h2', label: 'Medium heading' },
+	{ id: 'h3', label: 'Small heading' },
+	{ id: 'subtext', label: 'Subtext' },
+	{ id: 'quote', label: 'Quote' },
+	{ id: 'ansi', label: 'ANSI color' },
 ]
 
 export const DefaultSettings: Settings = {

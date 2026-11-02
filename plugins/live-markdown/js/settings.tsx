@@ -50,7 +50,6 @@ export default function SettingsComponent({
 							<TableSwitchRow
 								key={format.id}
 								label={format.label}
-								subLabel={format.example}
 								value={settings.menu.includes(format.id)}
 								onValueChange={on => {
 									const menu = Formats.map(f => f.id).filter(id =>

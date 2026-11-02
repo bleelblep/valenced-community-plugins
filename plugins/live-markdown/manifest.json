@@ -2,7 +2,7 @@
 	"format": 1,
 	"id": "bleelblep.live-markdown",
 	"name": "Live Markdown",
-	"description": "Shows bold, italics, code, spoilers and more styled as you type a message.",
+	"description": "Show bold, italics, code, spoilers and more styled as you type a message.",
 	"author": "bleelblep <119043674385547264>",
 	"icon": "TextIcon",
 	"version": "1.0.0",

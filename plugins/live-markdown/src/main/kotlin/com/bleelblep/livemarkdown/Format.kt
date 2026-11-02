@@ -27,15 +27,15 @@ internal enum class Format(val id: String, val title: String) {
 	H3("h3", "Small heading"),
 	SUBTEXT("subtext", "Subtext"),
 	QUOTE("quote", "Quote"),
-	ANSI("ansi", "ANSI colour"),
+	ANSI("ansi", "ANSI color"),
 }
 
 private val ANSI_CHOICES = listOf(
 	"Red" to "31", "Green" to "32", "Yellow" to "33", "Blue" to "34", "Pink" to "35", "Cyan" to "36",
-	"White" to "37", "Grey" to "30", "Bold" to "1", "Underline" to "4",
-	"Dark blue background" to "40", "Orange background" to "41", "Grey-blue background" to "42",
-	"Teal background" to "43", "Grey background" to "44", "Indigo background" to "45",
-	"Light grey background" to "46", "White background" to "47",
+	"White" to "37", "Gray" to "30", "Bold" to "1", "Underline" to "4",
+	"Dark blue background" to "40", "Orange background" to "41", "Gray-blue background" to "42",
+	"Teal background" to "43", "Gray background" to "44", "Indigo background" to "45",
+	"Light gray background" to "46", "White background" to "47",
 )
 private const val ESC = "\u001b"
 
@@ -97,7 +97,7 @@ private fun activityOf(context: Context): Activity? {
 private fun pickAnsi(view: TextView, start: Int, end: Int) {
 	val activity = activityOf(view.context) ?: return
 	AlertDialog.Builder(activity)
-		.setTitle("ANSI colour")
+		.setTitle("ANSI color")
 		.setItems(ANSI_CHOICES.map { it.first }.toTypedArray()) { _, which -> applyAnsi(view, start, end, ANSI_CHOICES[which].second) }
 		.setNegativeButton(android.R.string.cancel, null)
 		.show()
