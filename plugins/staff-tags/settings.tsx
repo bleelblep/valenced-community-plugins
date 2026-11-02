@@ -28,8 +28,7 @@ export default function SettingsComponent({
 				<Stack spacing={24}>
 					<TableRowGroup title="Everywhere">
 						<TableSwitchRow
-							label="Use top role colour for tag backgrounds"
-							subLabel="A colour you set for a tag still wins over the role colour"
+							label="Use role colour"
 							value={!!useRoleColor}
 							onValueChange={useRoleColor => storage.set({ useRoleColor })}
 						/>
@@ -73,7 +72,7 @@ function TagRows({
 						dim={!enabled}
 					/>
 				}
-				label="Show this tag"
+				label="Show tag"
 				value={enabled}
 				onValueChange={enabled => setOverride(id, { enabled })}
 			/>

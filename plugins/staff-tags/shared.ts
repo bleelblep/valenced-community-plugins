@@ -17,7 +17,6 @@ export const DefaultSettings: Settings = { useRoleColor: false, tags: {} }
 
 let storage: JsonStorage<Settings> | undefined
 let reporter: { reportError(error: unknown): void } | undefined
-const reported = new Set<string>()
 
 export function init(
 	jsonStorage?: JsonStorage<Settings>,
@@ -39,11 +38,8 @@ export function setOverride(id: string, patch: TagOverride) {
 	storage?.set({ tags: { [id]: patch } } as Partial<Settings>)
 }
 
-// Hooks run on every row, so each distinct error is reported once
 export function report(context: string, error?: unknown) {
 	const message =
 		error === undefined ? context : `${context}: ${getErrorStack(error)}`
-	if (reported.has(message)) return
-	reported.add(message)
 	reporter?.reportError(message)
 }
