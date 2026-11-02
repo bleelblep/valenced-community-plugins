@@ -2,7 +2,7 @@
 	"format": 1,
 	"id": "bleelblep.hide-call-buttons",
 	"name": "Hide Call Buttons",
-	"description": "Hides call and video buttons on profiles, at the top of DMs, in the friends list and in voice channels.",
+	"description": "Hide call and video buttons on profiles, at the top of DMs, in the friends list and in voice channels.",
 	"author": "bleelblep <119043674385547264>",
 	"contributors": [
 		"John <780819226839220265> (https://github.com/janisslsm \"GitHub\")"
