@@ -1,6 +1,5 @@
 import { Stores } from '@valenced/discord/flux'
 import { overrideFor, report } from './shared'
-import type { DiscordModules } from '@valenced/discord/types'
 import type { ReactNode } from 'react'
 
 export interface Guild {
@@ -44,27 +43,21 @@ export interface PermissionUtils {
 	canEveryoneRole: unknown
 }
 
-type Store<T> = DiscordModules.Flux.Store<T> | undefined
-
-export const stores = {
-	guild: () =>
-		Stores.GuildStore as Store<{ getGuild(id?: string): Guild | undefined }>,
-	channel: () =>
-		Stores.ChannelStore as Store<{
-			getChannel(id?: string): Channel | undefined
-		}>,
-	selectedChannel: () =>
-		Stores.SelectedChannelStore as Store<{
-			getChannelId(): string | undefined
-		}>,
-	guildMember: () =>
-		Stores.GuildMemberStore as Store<{
-			getMember(
-				guildId: string,
-				userId: string,
-			): { colorString?: string } | undefined
-		}>,
+interface StoreMethods {
+	GuildStore: { getGuild(id?: string): Guild | undefined }
+	ChannelStore: { getChannel(id?: string): Channel | undefined }
+	SelectedChannelStore: { getChannelId(): string | undefined }
+	GuildMemberStore: {
+		getMember(
+			guildId: string,
+			userId: string,
+		): { colorString?: string } | undefined
+	}
 }
+
+// Read when used: a store may not be ready when the plugin loads
+export const store = <K extends keyof StoreMethods>(name: K) =>
+	Stores[name] as StoreMethods[K] | undefined
 
 // Not in Constants on this platform
 const Permissions = {
@@ -237,7 +230,7 @@ export function getTag(
 
 		const roleColor =
 			useRoleColor && guild
-				? stores.guildMember()?.getMember(guild.id, user.id)?.colorString
+				? store('GuildMemberStore')?.getMember(guild.id, user.id)?.colorString
 				: undefined
 		const backgroundColor =
 			(custom.useCustomColor && custom.color) || roleColor || tag.defaultColor

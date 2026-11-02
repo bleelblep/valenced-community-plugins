@@ -15,7 +15,7 @@ import {
 	isBuiltInTag,
 	setPermissionUtils,
 	setTagModule,
-	stores,
+	store,
 	tagModule,
 	tagProps,
 } from './tags'
@@ -216,8 +216,8 @@ export default plugin<{ jsonStorage: Settings }>({
 function addMessageTag(ret: TagProperties | undefined, message?: Message) {
 	if (ret?.tagText || !message?.author) return ret
 
-	const channel = stores.channel()?.getChannel(message.channel_id)
-	const guild = stores.guild()?.getGuild(channel?.guild_id)
+	const channel = store('ChannelStore')?.getChannel(message.channel_id)
+	const guild = store('GuildStore')?.getGuild(channel?.guild_id)
 	const tag = getTag(guild, channel, message.author, settings().useRoleColor)
 	if (!tag) return ret
 
@@ -251,7 +251,7 @@ function addRowTag(rendered: ReactNode, props?: UserProps) {
 
 	const tag = () =>
 		getTag(
-			props?.guildId ? stores.guild()?.getGuild(props.guildId) : undefined,
+			props?.guildId ? store('GuildStore')?.getGuild(props.guildId) : undefined,
 			undefined,
 			props?.user,
 			settings().useRoleColor,
@@ -270,11 +270,11 @@ function addProfileTag(rendered: ReactNode, { guildId, user }: UserProps) {
 	if (!user || !guildId) return rendered
 
 	const tag = () => {
-		const channel = stores
-			.channel()
-			?.getChannel(stores.selectedChannel()?.getChannelId())
+		const channel = store('ChannelStore')?.getChannel(
+			store('SelectedChannelStore')?.getChannelId(),
+		)
 		return getTag(
-			stores.guild()?.getGuild(guildId),
+			store('GuildStore')?.getGuild(guildId),
 			channel?.guild_id === guildId ? channel : undefined,
 			user,
 			settings().useRoleColor,
