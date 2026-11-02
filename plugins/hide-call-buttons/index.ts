@@ -40,7 +40,6 @@ export default plugin<{ jsonStorage: Settings }>({
 			return
 		}
 
-		const reported = new Set<string>()
 		const patch =
 			(label: string, prune: Prune) =>
 			(host: Record<string, Render>, key: string) =>
@@ -52,11 +51,9 @@ export default plugin<{ jsonStorage: Settings }>({
 								...jsonStorage.cache,
 							})
 						} catch (e) {
-							const message = `Failed to hide ${label} buttons: ${getErrorStack(e)}`
-							if (!reported.has(message)) {
-								reported.add(message)
-								plugin.reportError(message)
-							}
+							plugin.reportError(
+								`Failed to hide ${label} buttons: ${getErrorStack(e)}`,
+							)
 							return rendered
 						}
 					}),
